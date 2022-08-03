@@ -2,6 +2,7 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { doLogout } from "../../redux/actions/accountActions";
+import logo from "./weather_logo.png";
 import "./Header.scss";
 
 const Header = () => {
@@ -18,15 +19,17 @@ const Header = () => {
         <>
             <Navbar bg="light" expand="lg">
                 <Container>
-                    <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
+                    <NavLink className="nav-link nav-brand-name" to="/">
+                        <img className="image" src={logo} alt="marcus dev" />
+                    </NavLink>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <NavLink className="nav-link" to="/">
                                 Home
                             </NavLink>
-                            <NavLink className="nav-link" to="/about">
-                                About
+                            <NavLink className="nav-link" to="/weather">
+                                Weather
                             </NavLink>
                         </Nav>
                         {userAccount && userAccount.access_token && (

@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux"; // Connect redux with react
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import About from "./components/About/About";
+import Weather from "./components/Weather/Weather";
 import Code from "./components/Code/Code";
 import "./index.scss";
 import store from "./redux/store"; // Redux store
@@ -17,7 +17,7 @@ root.render(
                 <Routes>
                     <Route path="/" element={<AppRoute />}>
                         {/* <Route index element={<Home />} /> */}
-                        <Route path="about" element={<About />}></Route>
+                        <Route path="weather" element={<Weather />}></Route>
                     </Route>
                     <Route path="code" element={<Code />}></Route>
                 </Routes>

@@ -44,10 +44,13 @@ export const doGetAccount = () => {
         axiosClient
             .get(process.env.REACT_APP_BACKEND_SSO_GET_ACCOUNT)
             .then(res => {
-                if (res && +res.errorCode === 0) {
+                if (
+                    (res && +res.errorCode === 0) ||
+                    (res.access_token && res.refresh_token)
+                ) {
                     dispatch({
                         type: USER_GET_ACCOUNT_SUCCESS,
-                        user: res.data,
+                        user: res.data ? res.data : res,
                     });
                 } else {
                     dispatch({

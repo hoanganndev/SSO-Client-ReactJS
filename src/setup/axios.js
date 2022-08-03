@@ -1,25 +1,43 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import axiosRetry from "axios-retry";
 
-const instance = axios.create({
+// Use the Redux store in non-component files
+let store;
+export const injectStore = _store => {
+    store = _store;
+};
+
+const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_SSO_URL,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
-// Automatically attach cookies from req to server
-instance.defaults.withCredentials = true;
+// Custom retry
+axiosRetry(axiosInstance, {
+    retries: 3,
+    retryCondition: error => {
+        return error.response.status === 400 || error.response.status === 405;
+    },
+    retryDelay: (retryCount, error) => {
+        return retryCount * 1000;
+    },
+});
 
-// Bearer token
-// instance.defaults.headers.common[
-//     "Authorization"
-// ] = `Bearer ${localStorage.getItem("jwt")}`;
+// Automatically attach cookies from req to server
+axiosInstance.defaults.withCredentials = true;
 
 // Add a request interceptor
-axios.interceptors.request.use(
+axiosInstance.interceptors.request.use(
     function (config) {
-        // Do something before request is sent
+        // Get access_token from redux
+        let headerToken =
+            store.getState()?.account?.userInfo?.access_token ?? "";
+        if (headerToken) {
+            config.headers.Authorization = `Bearer ${headerToken}`;
+        }
         return config;
     },
     function (error) {
@@ -29,7 +47,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-instance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     function (response) {
         return response && response.data ? response.data : response;
     },
@@ -86,4 +104,4 @@ instance.interceptors.response.use(
         }
     }
 );
-export default instance;
+export default axiosInstance;

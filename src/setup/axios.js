@@ -10,9 +10,6 @@ export const injectStore = _store => {
 
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_SSO_URL,
-    headers: {
-        "Content-Type": "application/json",
-    },
 });
 
 // Custom retry
@@ -49,6 +46,7 @@ axiosInstance.interceptors.request.use(
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
     function (response) {
+        console.log(">>> response", response);
         return response && response.data ? response.data : response;
     },
     function (error) {

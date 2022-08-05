@@ -6,10 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
 import Header from "./components/Header/Header";
 import { doGetAccount } from "./redux/actions/accountActions";
+import { Outlet } from "react-router-dom";
 
 function App() {
     const dispatch = useDispatch();
-    const firstRenderRef = useRef(false);
+    const firstRenderRef = useRef(true);
     const userAccount = useSelector(state => state.account.userInfo);
     const isLoading = useSelector(state => state.account.isLoading);
     const style = {
@@ -20,16 +21,11 @@ function App() {
     };
 
     useEffect(() => {
-        if (
-            userAccount &&
-            !userAccount.access_token &&
-            firstRenderRef.current === false
-        ) {
+        if (userAccount && !userAccount.access_token) {
             dispatch(doGetAccount());
-            firstRenderRef.current = true;
         }
+        firstRenderRef.current = false;
     }, []);
-
     return (
         <>
             {isLoading === true ? (
@@ -43,9 +39,15 @@ function App() {
                     </div>
                 </div>
             ) : (
-                <div className="App">
-                    <Header />
-                </div>
+                <>
+                    {firstRenderRef.current === false && (
+                        // Skip the first render
+                        <div className="App">
+                            <Header />
+                            <Outlet />
+                        </div>
+                    )}
+                </>
             )}
             <ToastContainer
                 position="top-right"

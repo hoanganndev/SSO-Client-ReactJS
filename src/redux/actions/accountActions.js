@@ -20,8 +20,10 @@ export const doLogin = ssoToken => {
                 ssoToken,
             })
             .then(res => {
+                console.log(">>>res  doLogin", res);
                 if (res && +res.errorCode === 0) {
                     dispatch({ type: USER_LOGIN_SUCCESS, user: res.data });
+                    dispatch(doGetAccount());
                 } else {
                     dispatch({
                         type: USER_LOGIN_FAILSED,
@@ -44,13 +46,11 @@ export const doGetAccount = () => {
         axiosClient
             .get(process.env.REACT_APP_BACKEND_SSO_GET_ACCOUNT)
             .then(res => {
-                if (
-                    (res && +res.errorCode === 0) ||
-                    (res.access_token && res.refresh_token)
-                ) {
+                console.log("res get account", res);
+                if (res && +res.errorCode === 0) {
                     dispatch({
                         type: USER_GET_ACCOUNT_SUCCESS,
-                        user: res.data ? res.data : res,
+                        user: res.data,
                     });
                 } else {
                     dispatch({

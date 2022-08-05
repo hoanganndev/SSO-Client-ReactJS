@@ -36,7 +36,7 @@ const Header = () => {
                             <Nav>
                                 <Nav.Link href="#">
                                     <span>Welcome! </span>
-                                    <span>
+                                    <span className="display-name">
                                         {userAccount.username
                                             ? userAccount.username
                                             : ""}

@@ -9,20 +9,29 @@ import "./index.scss";
 import store from "./redux/store"; // Redux store
 import reportWebVitals from "./reportWebVitals";
 import AppRoute from "./routes/AppRoute";
+import Home from "./components/Home/Home";
+import PrivateRoute from "./routes/PrivateRoute";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <Provider store={store}>
-        <React.StrictMode>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<AppRoute />}>
-                        {/* <Route index element={<Home />} /> */}
-                        <Route path="weather" element={<Weather />}></Route>
-                    </Route>
-                    <Route path="code" element={<Code />}></Route>
-                </Routes>
-            </BrowserRouter>
-        </React.StrictMode>
+        {/* <React.StrictMode> */}
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<AppRoute />}>
+                    <Route path="/" index element={<Home />} />
+                    <Route
+                        path="weather"
+                        element={
+                            <PrivateRoute>
+                                <Weather />
+                            </PrivateRoute>
+                        }
+                    />
+                </Route>
+                <Route path="code" element={<Code />}></Route>
+            </Routes>
+        </BrowserRouter>
+        {/* </React.StrictMode> */}
     </Provider>
 );
 

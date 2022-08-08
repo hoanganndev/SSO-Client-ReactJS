@@ -10,6 +10,7 @@ export const injectStore = _store => {
 
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_SSO_URL,
+    withCredentials: true,
 });
 
 // Custom retry
@@ -22,9 +23,6 @@ axiosRetry(axiosInstance, {
         return retryCount * 1000;
     },
 });
-
-// Automatically attach cookies from req to server
-axiosInstance.defaults.withCredentials = true;
 
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
@@ -46,7 +44,6 @@ axiosInstance.interceptors.request.use(
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
     function (response) {
-        console.log(">>> response", response);
         return response && response.data ? response.data : response;
     },
     function (error) {

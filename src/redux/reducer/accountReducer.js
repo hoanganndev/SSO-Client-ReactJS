@@ -75,7 +75,6 @@ const accountReducer = (state = INITIAL_STATE, action) => {
                 errMessage: "",
             };
         case USER_GET_ACCOUNT_SUCCESS:
-            console.log(">>> check me check check ");
             return {
                 ...state,
                 userInfo: action.user,
